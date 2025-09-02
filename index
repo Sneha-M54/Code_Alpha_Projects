@@ -1,0 +1,66 @@
+import random
+
+def hangman():
+    # Predefined list of words
+    words = ['python', 'hangman', 'computer', 'program', 'game']
+    
+    # Select a random word from the list
+    secret_word = random.choice(words)
+    
+    # Game variables
+    guessed_letters = []  # Letters the player has guessed
+    word_completion = "_" * len(secret_word)  # String representation of guessed word
+    incorrect_guesses = 0  # Count of incorrect guesses
+    max_incorrect = 6  # Maximum allowed incorrect guesses
+    
+    print("Welcome to Hangman!")
+    print("Try to guess the word. You can have up to 6 incorrect guesses.")
+    
+    # Main game loop
+    while incorrect_guesses < max_incorrect and "_" in word_completion:
+        print(f"\nWord: {word_completion}")
+        print(f"Incorrect guesses: {incorrect_guesses}/{max_incorrect}")
+        print(f"Guessed letters: {', '.join(guessed_letters)}")
+        
+        # Get player's guess
+        guess = input("Please guess a letter: ").lower()
+        
+        # Validate input
+        if len(guess) != 1 or not guess.isalpha():
+            print("Invalid input. Please enter a single letter.")
+            continue
+        
+        # Check if letter was already guessed
+        if guess in guessed_letters:
+            print(f"You already guessed the letter '{guess}'.")
+            continue
+        
+        # Add the guess to the list of guessed letters
+        guessed_letters.append(guess)
+        
+        # Check if the guess is in the secret word
+        if guess in secret_word:
+            print(f"Good guess! '{guess}' is in the word.")
+            
+            # Update the word completion string
+            new_completion = ""
+            for i in range(len(secret_word)):
+                if secret_word[i] == guess:
+                    new_completion += guess
+                else:
+                    new_completion += word_completion[i]
+            word_completion = new_completion
+        else:
+            print(f"Sorry, '{guess}' is not in the word.")
+            incorrect_guesses += 1
+    
+    # Game over - check if player won or lost
+    if "_" not in word_completion:
+        print(f"\nCongratulations! You guessed the word: {secret_word}")
+    else:
+        print(f"\nGame over! You ran out of guesses.")
+        print(f"The word was: {secret_word}")
+
+# Start the game
+if __name__ == "__main__":
+    hangman()
